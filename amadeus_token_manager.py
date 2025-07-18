@@ -9,7 +9,6 @@ class AmadeusTokenManager:
         self.token = None
 
     def fetch_token(self):
-        """Fetches a new access token using client credentials."""
         payload = {
             "grant_type": "client_credentials",
             "client_id": self.client_id,
@@ -23,15 +22,9 @@ class AmadeusTokenManager:
         try:
             response = requests.post(self.token_url, data=payload, headers=headers)
             response.raise_for_status()
-
             self.token = response.json().get("access_token")
-            if self.token:
-                logging.info("Amadeus access token retrieved successfully.")
-            else:
-                logging.warning("Access token not found in response.")
+            return self.token
 
         except requests.exceptions.RequestException as err:
             logging.error(f"Token request failed: {err}")
-            self.token = None
-
-        return self.token
+            return None
