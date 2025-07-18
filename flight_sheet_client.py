@@ -13,17 +13,14 @@ class FlightSheetClient:
         }
 
     def fetch_city_price_map(self):
-        """Returns a dictionary of IATA codes mapped to their max prices."""
         try:
             response = requests.get(self.endpoint, headers=self.headers)
             response.raise_for_status()
-
             data = response.json()
             return {
                 item["iataCode"]: item["highestPrice"]
                 for item in data.get("prices", [])
             }
-
         except requests.exceptions.RequestException as e:
             print(f"[Sheet Fetch Error] {e}")
             return {}
